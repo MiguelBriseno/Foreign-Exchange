@@ -1,157 +1,64 @@
 <template>
-  <v-container class="fill-height">
-    <v-responsive
-      class="align-centerfill-height mx-auto"
-      max-width="900"
-    >
-      <v-img
-        class="mb-4"
-        height="150"
-        src="@/assets/logo.png"
-      />
-
-      <div class="text-center">
-        <div class="text-body-2 font-weight-light mb-n1">Welcome to</div>
-
-        <h1 class="text-h2 font-weight-bold">Vuetify</h1>
-      </div>
-
-      <div class="py-4" />
-
-      <v-row>
-        <v-col cols="12">
-          <v-card
-            class="py-4"
-            color="surface-variant"
-            image="https://cdn.vuetifyjs.com/docs/images/one/create/feature.png"
-            prepend-icon="mdi-rocket-launch-outline"
-            rounded="lg"
-            variant="outlined"
-          >
-            <template #image>
-              <v-img position="top right" />
-            </template>
-
-            <template #title>
-              <h2 class="text-h5 font-weight-bold">Get started</h2>
-            </template>
-
-            <template #subtitle>
-              <div class="text-subtitle-1">
-                Change this page by updating <v-kbd>{{ `<HelloWorld />` }}</v-kbd> in <v-kbd>components/HelloWorld.vue</v-kbd>.
-              </div>
-            </template>
-
-            <v-overlay
-              opacity=".12"
-              scrim="primary"
-              contained
-              model-value
-              persistent
-            />
-          </v-card>
-        </v-col>
-
-        <v-col cols="6">
-          <v-card
-            append-icon="mdi-open-in-new"
-            class="py-4"
-            color="surface-variant"
-            href="https://vuetifyjs.com/"
-            prepend-icon="mdi-text-box-outline"
-            rel="noopener noreferrer"
-            rounded="lg"
-            subtitle="Learn about all things Vuetify in our documentation."
-            target="_blank"
-            title="Documentation"
-            variant="text"
-          >
-            <v-overlay
-              opacity=".06"
-              scrim="primary"
-              contained
-              model-value
-              persistent
-            />
-          </v-card>
-        </v-col>
-
-        <v-col cols="6">
-          <v-card
-            append-icon="mdi-open-in-new"
-            class="py-4"
-            color="surface-variant"
-            href="https://vuetifyjs.com/introduction/why-vuetify/#feature-guides"
-            prepend-icon="mdi-star-circle-outline"
-            rel="noopener noreferrer"
-            rounded="lg"
-            subtitle="Explore available framework Features."
-            target="_blank"
-            title="Features"
-            variant="text"
-          >
-            <v-overlay
-              opacity=".06"
-              scrim="primary"
-              contained
-              model-value
-              persistent
-            />
-          </v-card>
-        </v-col>
-
-        <v-col cols="6">
-          <v-card
-            append-icon="mdi-open-in-new"
-            class="py-4"
-            color="surface-variant"
-            href="https://vuetifyjs.com/components/all"
-            prepend-icon="mdi-widgets-outline"
-            rel="noopener noreferrer"
-            rounded="lg"
-            subtitle="Discover components in the API Explorer."
-            target="_blank"
-            title="Components"
-            variant="text"
-          >
-            <v-overlay
-              opacity=".06"
-              scrim="primary"
-              contained
-              model-value
-              persistent
-            />
-          </v-card>
-        </v-col>
-
-        <v-col cols="6">
-          <v-card
-            append-icon="mdi-open-in-new"
-            class="py-4"
-            color="surface-variant"
-            href="https://discord.vuetifyjs.com"
-            prepend-icon="mdi-account-group-outline"
-            rel="noopener noreferrer"
-            rounded="lg"
-            subtitle="Connect with Vuetify developers."
-            target="_blank"
-            title="Community"
-            variant="text"
-          >
-            <v-overlay
-              opacity=".06"
-              scrim="primary"
-              contained
-              model-value
-              persistent
-            />
-          </v-card>
-        </v-col>
-      </v-row>
-    </v-responsive>
+  <v-container>
+    <v-row id="header">
+      <v-col cols="12">
+        <h1>EXCHANGE RATES AND CURRENCY API</h1>
+      </v-col>
+    </v-row>
+    <v-row id="main">
+      <v-col id="left">
+        <v-select label="Selecciona la moneda"></v-select>
+      </v-col>
+      <v-col id="rigth">
+        
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
-<script setup>
-  //
+<script>
+import axios from 'axios';
+
+export default {
+  data() {
+    return {
+      currencies: null,
+    };
+  },
+  async created() {
+    await this.getCurrencies();
+  },
+  methods: {
+    async getCurrencies() {
+      try {
+        const response = await axios.get('https://api.frankfurter.app/currencies');
+        this.currencies = response.data;
+      } 
+      catch (error) {
+        this.error = 'Error al cargar las monedas.';
+      } 
+      finally {
+        this.loading = false;
+      }
+    }
+  }
+};
 </script>
+
+<style scoped>
+#header{
+  display: block;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+#main{
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+#left{
+  padding: .5rem;
+}
+#rigth{
+  padding: .5rem;
+}
+</style>
