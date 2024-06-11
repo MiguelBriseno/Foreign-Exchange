@@ -7,9 +7,9 @@
     </v-row>
     <v-row id="main">
       <v-col id="left">
-        <v-select label="Selecciona la moneda"></v-select>
+        <v-select label="Selecciona la moneda" :items="currencies" item-value="text" item-title="value" v-model="currency"></v-select>
       </v-col>
-      <v-col id="rigth">
+      <v-col id="right">
         
       </v-col>
     </v-row>
@@ -22,7 +22,10 @@ import axios from 'axios';
 export default {
   data() {
     return {
-      currencies: null,
+      currencies: [],
+      currency: null,
+      loading: true,
+      error: null
     };
   },
   async created() {
@@ -32,13 +35,25 @@ export default {
     async getCurrencies() {
       try {
         const response = await axios.get('https://api.frankfurter.app/currencies');
-        this.currencies = response.data;
+        // Convertir el objeto JSON en un array de pares clave-valor
+        this.currencies = Object.entries(response.data).map(([key, value]) => ({ text: key, value }));
       } 
       catch (error) {
         this.error = 'Error al cargar las monedas.';
       } 
       finally {
         this.loading = false;
+      }
+    },
+    async getHistoric(){
+      try{
+
+      }
+      catch (error){
+
+      }
+      finally {
+        
       }
     }
   }
@@ -58,7 +73,7 @@ export default {
 #left{
   padding: .5rem;
 }
-#rigth{
+#right{
   padding: .5rem;
 }
 </style>
